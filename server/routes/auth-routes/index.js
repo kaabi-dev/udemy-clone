@@ -1,13 +1,26 @@
 import express from 'express';
-import { registerUser } from '../../controllers/auth-controller/index.js';
+import {
+  loginUser,
+  registerUser,
+} from '../../controllers/auth-controller/index.js';
+import authenticateMiddleware from '../../middleware/auth-middleware.js';
 
 const router = express.Router();
 
 // Create methods
 router.post('/register', registerUser);
-router.get('/aa', (req, res) => {
-  return res.send(200).json({
-    message: 'hello',
+
+router.post('/login', loginUser);
+
+router.post('/check-auth', authenticateMiddleware, (req, res) => {
+  const user = req.user;
+
+  res.status(200).json({
+    success: true,
+    message: 'Authenticated user successfully!',
+    data: {
+      user,
+    },
   });
 });
 
