@@ -22,6 +22,7 @@ function AuthPage() {
     signUpFormData,
     setSignUpFormData,
     handleRegisterUser,
+    handleLoginUser,
   } = useContext(AuthContext);
 
   const handleTabChange = (value) => {
@@ -45,8 +46,6 @@ function AuthPage() {
     );
   };
 
-  console.log(signInFormData);
-
   return (
     <div className='flex flex-col min-h-screen'>
       <header className='px-4 lg:px-6 h-14 flex items-center border-b'>
@@ -67,6 +66,7 @@ function AuthPage() {
             <TabsTrigger value='signup'>Sign Up</TabsTrigger>
           </TabsList>
 
+          {/* Log in */}
           <TabsContent value='signin'>
             <Card className='p-6 space-y-4'>
               <CardHeader>
@@ -83,11 +83,13 @@ function AuthPage() {
                   formData={signInFormData}
                   setFormData={setSignInFormData}
                   isButtonDisabled={!checkIfSignInFormValid()}
+                  handleSubmit={handleLoginUser}
                 />
               </CardContent>
             </Card>
           </TabsContent>
 
+          {/* Sign up */}
           <TabsContent value='signup'>
             <Card className='p-6 space-y-4'>
               <CardHeader>
