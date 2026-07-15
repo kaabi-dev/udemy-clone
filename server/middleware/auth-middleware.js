@@ -14,6 +14,8 @@ const authenticate = (req, res, next) => {
     });
   }
 
+  // we split because we want to get `Bearer ${accessToken}`
+  // the accessToken value that is saved on sessionStorage on the web
   const token = authHeader.split(' ')[1];
   const payload = verifyToken(token, 'JWT_SECRET');
 
