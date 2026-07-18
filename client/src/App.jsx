@@ -4,9 +4,10 @@ import RouteGuard from './components/route-guard';
 import { useContext } from 'react';
 import { AuthContext } from '@/context/auth-context';
 import InstructorDashboardPage from './pages/instructor';
-import StudentViewCommonLayout from './components/student-view/CommonLayouts';
+import StudentViewCommonLayout from './components/student-view/common-layouts';
 import StudentHomePage from './pages/student/home';
 import NotFoundPage from './pages/not-found';
+import CreateNewCoursePage from './pages/instructor/create-new-course-page';
 
 function App() {
   const { auth } = useContext(AuthContext);
@@ -29,6 +30,16 @@ function App() {
         element={
           <RouteGuard
             element={<InstructorDashboardPage />}
+            authenticated={auth?.authenticate}
+            user={auth?.user}
+          />
+        }
+      />
+      <Route
+        path='/instructor/create-new-course'
+        element={
+          <RouteGuard
+            element={<CreateNewCoursePage />}
             authenticated={auth?.authenticate}
             user={auth?.user}
           />

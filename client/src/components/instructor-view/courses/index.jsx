@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import {
   Table,
-  TableCaption,
   TableHeader,
   TableRow,
   TableHead,
@@ -10,12 +10,20 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Delete, Edit } from 'lucide-react';
+
 function InstructorCourses() {
+  const navigate = useNavigate();
+
   return (
     <Card>
       <CardHeader className='flex justify-between flex-row items-center'>
         <CardTitle className='text-3xl font-extrabold'>All Courses</CardTitle>
-        <Button className='p-6'>Create A New Course</Button>
+        <Button
+          onClick={() => navigate('/instructor/create-new-course')}
+          className='p-6'
+        >
+          Create A New Course
+        </Button>
       </CardHeader>
 
       <CardContent className='overflow-x-auto'>
