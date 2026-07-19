@@ -44,33 +44,6 @@ function CourseCurriculum() {
     setCourseCurriculumFormData(copyCourseCurriculumFormData);
   };
 
-  // const handleSingleLectureUpload = async (event, currentIndex) => {
-  //   console.log('files ', event.target.files[0]);
-  //   const selectedFile = event.target.files[0];
-
-  //   if (selectedFile) {
-  //     const videoFormData = new FormData();
-  //     videoFormData.append('file', selectedFile);
-
-  //     try {
-  //       setMediaUploadProgress(true);
-  //       const response = await mediaUploadService(videoFormData);
-  //       if (response.success) {
-  //         let copyCourseCurriculumFormData = [...courseCurriculumFormData];
-  //         copyCourseCurriculumFormData[currentIndex] = {
-  //           ...copyCourseCurriculumFormData[currentIndex],
-  //           videoUrl: response?.data?.url,
-  //           public_id: response?.data?.public_id,
-  //         };
-  //         setCourseCurriculumFormData(copyCourseCurriculumFormData);
-  //         setMediaUploadProgress(false);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
-
   async function handleSingleLectureUpload(event, currentIndex) {
     const selectedFile = event.target.files[0];
 
@@ -82,13 +55,13 @@ function CourseCurriculum() {
         setMediaUploadProgress(true);
         const response = await mediaUploadService(videoFormData);
         if (response.success) {
-          let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
-          cpyCourseCurriculumFormData[currentIndex] = {
-            ...cpyCourseCurriculumFormData[currentIndex],
+          let copyCourseCurriculumFormData = [...courseCurriculumFormData];
+          copyCourseCurriculumFormData[currentIndex] = {
+            ...copyCourseCurriculumFormData[currentIndex],
             videoUrl: response?.data?.url,
             public_id: response?.data?.public_id,
           };
-          setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+          setCourseCurriculumFormData(copyCourseCurriculumFormData);
           setMediaUploadProgress(false);
         }
       } catch (error) {
@@ -96,8 +69,6 @@ function CourseCurriculum() {
       }
     }
   }
-
-  console.log(courseCurriculumFormData);
 
   return (
     <Card>
