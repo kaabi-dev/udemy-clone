@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth-routes/index.js';
+import mediaRoutes from './routes/instructor-routes/media-routes.js';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ mongoose
 
 // routes configurations
 app.use('/auth', authRoutes);
+app.use('/media', mediaRoutes);
 
 app.use((err, req, res, next) => {
   console.log(err.stack);

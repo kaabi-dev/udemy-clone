@@ -4,8 +4,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 const RouteGuard = ({ authenticated, user, element }) => {
   const location = useLocation();
 
-  console.log(authenticated, user);
-
   // If user is not authenticated and visits other than /auth
   // then redirect to /auth.
   if (!authenticated && !location.pathname.includes('/auth')) {

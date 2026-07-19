@@ -6,17 +6,96 @@ import { Input } from '../../../ui/input';
 import { Switch } from '../../../ui/switch';
 import { Label } from '../../../ui/label';
 import { courseCurriculumInitialFormData } from '../../../../config';
+import { mediaUploadService } from '../../../../services';
 
 function CourseCurriculum() {
-  const { courseCurriculumFormData, setCourseCurriculumFormData } =
-    useContext(InstructorContext);
+  const {
+    courseCurriculumFormData,
+    setCourseCurriculumFormData,
+    mediaUploadProgress,
+    setMediaUploadProgress,
+  } = useContext(InstructorContext);
 
   const handleNewLecture = () => {
     setCourseCurriculumFormData([
       ...courseCurriculumFormData,
-      { ...courseCurriculumInitialFormData },
+      { ...courseCurriculumInitialFormData[0] },
     ]);
   };
+
+  // We want to add/edit title value for right lecture
+  const handleCourseTitleChange = (event, currentIndex) => {
+    let copyCourseCurriculumFormData = [...courseCurriculumFormData];
+
+    copyCourseCurriculumFormData[currentIndex] = {
+      ...copyCourseCurriculumFormData[currentIndex],
+      title: event.target.value,
+    };
+    setCourseCurriculumFormData(copyCourseCurriculumFormData);
+  };
+
+  const handleFreePreviewChange = (currentValue, currentIndex) => {
+    let copyCourseCurriculumFormData = [...courseCurriculumFormData];
+
+    copyCourseCurriculumFormData[currentIndex] = {
+      ...copyCourseCurriculumFormData[currentIndex],
+      freePreview: currentValue,
+    };
+    setCourseCurriculumFormData(copyCourseCurriculumFormData);
+  };
+
+  // const handleSingleLectureUpload = async (event, currentIndex) => {
+  //   console.log('files ', event.target.files[0]);
+  //   const selectedFile = event.target.files[0];
+
+  //   if (selectedFile) {
+  //     const videoFormData = new FormData();
+  //     videoFormData.append('file', selectedFile);
+
+  //     try {
+  //       setMediaUploadProgress(true);
+  //       const response = await mediaUploadService(videoFormData);
+  //       if (response.success) {
+  //         let copyCourseCurriculumFormData = [...courseCurriculumFormData];
+  //         copyCourseCurriculumFormData[currentIndex] = {
+  //           ...copyCourseCurriculumFormData[currentIndex],
+  //           videoUrl: response?.data?.url,
+  //           public_id: response?.data?.public_id,
+  //         };
+  //         setCourseCurriculumFormData(copyCourseCurriculumFormData);
+  //         setMediaUploadProgress(false);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
+  async function handleSingleLectureUpload(event, currentIndex) {
+    const selectedFile = event.target.files[0];
+
+    if (selectedFile) {
+      const videoFormData = new FormData();
+      videoFormData.append('file', selectedFile);
+
+      try {
+        setMediaUploadProgress(true);
+        const response = await mediaUploadService(videoFormData);
+        if (response.success) {
+          let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+          cpyCourseCurriculumFormData[currentIndex] = {
+            ...cpyCourseCurriculumFormData[currentIndex],
+            videoUrl: response?.data?.url,
+            public_id: response?.data?.public_id,
+          };
+          setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+          setMediaUploadProgress(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
   console.log(courseCurriculumFormData);
 
@@ -31,27 +110,37 @@ function CourseCurriculum() {
 
         <div className='mb-4 space-y-4'>
           {courseCurriculumFormData.map((curriculumItem, index) => (
-            <div className='border p-5 rounded-md'>
+            <div className='border p-5 rounded-md' key={index}>
               <div className='flex gap-5 items-center'>
                 <h3 className='font-semibold'>Lecture {index + 1}</h3>
                 <Input
                   name={`title-${index + 1}`}
                   placeholder='Enter lecture title'
                   className='max-w-96'
+                  onChange={(event) => handleCourseTitleChange(event, index)}
+                  value={courseCurriculumFormData[index]?.title}
                 />
                 <div className='flex items-center space-x-2'>
                   <Switch
-                    checked={false}
+                    onCheckedChange={(value) =>
+                      handleFreePreviewChange(value, index)
+                    }
+                    checked={courseCurriculumFormData[index]?.freePreview}
                     id={`freePreview-${index + 1}`}
                   ></Switch>
-                  <Label htmlForm={`freePreview-${index + 1}`}>
+                  <Label htmlFor={`freePreview-${index + 1}`}>
                     Free Preview
                   </Label>
                 </div>
               </div>
 
               <div className='mt-6'>
-                <Input type='file' accept='video/*' className='mb-4' />
+                <Input
+                  type='file'
+                  accept='video/*'
+                  onChange={(event) => handleSingleLectureUpload(event, index)}
+                  className='mb-4'
+                />
               </div>
             </div>
           ))}
